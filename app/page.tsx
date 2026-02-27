@@ -5,6 +5,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Send } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { saveNLQuery } from "@/app/api/backend/query";  
+
+
 
 interface Message {
   id: string
@@ -48,19 +51,30 @@ export default function Home() {
     scrollToBottom()
   }, [messages])
 
-  const handleSend = () => {
-    if (!input.trim()) return
+  const sessionId = useRef<string>(crypto.randomUUID())
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return
+
+    const queryText = input.trim()
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
-      content: input,
+      content: queryText,
       timestamp: new Date(),
     }
 
     setMessages((prev) => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
+
+    // Save query to DB (non-blocking, errors logged only)
+    saveNLQuery(queryText, sessionId.current).then((result) => {
+      if (!result.success) {
+        console.error('Failed to save query:', result.error)
+      }
+    })
 
     // Simulate API response
     setTimeout(() => {
