@@ -3,6 +3,7 @@
 import { Sidebar } from '@/components/sidebar'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
+import { saveURL } from "@/app/api/backend/settings"; 
 
 export default function Settings() {
   const { isLoading } = useAuth()
@@ -10,6 +11,7 @@ export default function Settings() {
   const [apiKey, setApiKey] = useState('')
   const [autoSave, setAutoSave] = useState(true)
   const [notifications, setNotifications] = useState(true)
+  const [urlStatus, setUrlStatus] = useState<{ success: boolean; error?: string } | null>(null)
 
   if (isLoading) {
     return (
@@ -67,23 +69,41 @@ export default function Settings() {
               </div>
             </div>
 
-            {/* API Configuration */}
+            {/* Database Configuration */}
             <div className="border border-border p-6">
-              <h2 className="mb-2 text-lg font-bold">API Configuration</h2>
+              <h2 className="mb-2 text-lg font-bold">Database Configuration</h2>
               <p className="mb-4 text-sm text-muted-foreground">
-                Manage your API settings and credentials
+                Manage your database connection settings
               </p>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold">API Key</label>
+                  <label className="block text-sm font-semibold">Database URL</label>
                   <input
                     type="text"
                     value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
+                    onChange={(e) => {
+                      setApiKey(e.target.value)
+                      setUrlStatus(null) // clear message on new input
+                    }}
                     className="mt-2 w-full border border-border bg-input px-4 py-2"
                   />
                 </div>
-                <button className="border border-primary bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
+
+                {urlStatus && (
+                  <p className={`text-sm ${urlStatus.success ? 'text-green-500' : 'text-red-500'}`}>
+                    {urlStatus.success ? '✅ URL submitted successfully!' : `❌ ${urlStatus.error}`}
+                  </p>
+                )}
+
+                <button
+                  className="border border-primary bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!apiKey.trim()}
+                  onClick={async () => {
+                    if (!apiKey.trim()) return
+                    const result = await saveURL(apiKey)
+                    setUrlStatus(result)
+                  }}
+                >
                   Submit URL
                 </button>
               </div>

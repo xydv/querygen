@@ -90,7 +90,8 @@ CREATE TABLE url_history (
 );
 
 
-
+-- This checks if the record exists regardless of UI glitches
+SELECT * FROM url_history;
 
 
 
