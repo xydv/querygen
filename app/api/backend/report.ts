@@ -61,9 +61,9 @@ function classifyColumn(mysqlType: string): ColType {
   return "categorical";
 }
 
-// ─── Ollama Integration ─────────────────────────────────────────────────────
+// ─── AI Insight Integration ─────────────────────────────────────────────────
 
-async function getOllamaInsight(prompt: string): Promise<string> {
+async function getAIInsight(prompt: string): Promise<string> {
   try {
     const response = await fetch("http://localhost:11434/api/generate", {
       method: "POST",
@@ -75,14 +75,14 @@ async function getOllamaInsight(prompt: string): Promise<string> {
         options: { temperature: 0.3, num_predict: 120 },
       }),
     });
-    if (!response.ok) return "AI insight unavailable — Ollama is not responding.";
+    if (!response.ok) return "AI insight unavailable — service is not responding.";
     const data = await response.json();
     const raw: string = data.response || "";
     const sentences = raw.replace(/\n/g, " ").split(/(?<=[.!?])\s+/).filter((s: string) => s.trim().length > 0);
     return sentences.slice(0, 2).join(" ").trim() || "No insight generated.";
   } catch (error) {
-    console.error("Ollama error:", error);
-    return "AI insight unavailable — ensure Ollama is running locally with llama3.2 model.";
+    console.error("AI Insight error:", error);
+    return "AI insight unavailable — ensure the AI service is running locally.";
   }
 }
 
@@ -283,7 +283,7 @@ export async function generateReport(): Promise<ReportData> {
       const { categoricalCols: cc, numericCols: nc } = barT;
       if (cc.length > 0 && nc.length > 0) {
         const data = buildBarChart(barT.rows, cc[0], nc[0]);
-        const insight = await getOllamaInsight(
+        const insight = await getAIInsight(
           `Analyze this bar chart from table "${barT.tableName}" showing "${nc[0].name}" grouped by "${cc[0].name}". Data: ${JSON.stringify(data.slice(0, 5))}. Write exactly 1-2 sentences highlighting which category has the highest and lowest values with exact numbers.`
         );
         charts.push({ id: "bar", title: `${nc[0].name} by ${cc[0].name}`, type: "bar", data, insight, xKey: "name", yKeys: ["value"], sourceTable: barT.tableName });
@@ -292,7 +292,7 @@ export async function generateReport(): Promise<ReportData> {
           const sum = barT.rows.reduce((s: number, r: any) => s + (parseFloat(r[nc.name]) || 0), 0);
           return { name: nc.name, value: Math.round(sum * 100) / 100 };
         });
-        const insight = await getOllamaInsight(`Analyze sums of numeric columns in "${barT.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences about highest and lowest.`);
+        const insight = await getAIInsight(`Analyze sums of numeric columns in "${barT.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences about highest and lowest.`);
         charts.push({ id: "bar", title: `Column Sums — ${barT.tableName}`, type: "bar", data, insight, xKey: "name", yKeys: ["value"], sourceTable: barT.tableName });
       }
     }
@@ -303,7 +303,7 @@ export async function generateReport(): Promise<ReportData> {
       usedTables.add(pieT.tableName);
       const catCol = pieT.categoricalCols[0] || pieT.columns[0];
       const data = buildPieChart(pieT.rows, catCol);
-      const insight = await getOllamaInsight(
+      const insight = await getAIInsight(
         `Analyze this pie chart from table "${pieT.tableName}" showing distribution of "${catCol.name}". Data: ${JSON.stringify(data)}. Write 1-2 sentences about which category is most and least common with exact counts.`
       );
       charts.push({ id: "pie", title: `${catCol.name} Distribution — ${pieT.tableName}`, type: "pie", data, insight, xKey: "name", yKeys: ["value"], sourceTable: pieT.tableName });
@@ -316,7 +316,7 @@ export async function generateReport(): Promise<ReportData> {
       const orderCol = lineT.temporalCols[0] || lineT.categoricalCols[0] || lineT.columns[0];
       const numCol = lineT.numericCols[0];
       const data = buildLineChart(lineT.rows, orderCol, numCol);
-      const insight = await getOllamaInsight(
+      const insight = await getAIInsight(
         `Analyze this line chart from table "${lineT.tableName}" showing "${numCol.name}" over "${orderCol.name}". Data (first 5): ${JSON.stringify(data.slice(0, 5))}. Write 1-2 sentences about trends, peaks and dips.`
       );
       charts.push({ id: "line", title: `${numCol.name} Trend — ${lineT.tableName}`, type: "line", data, insight, xKey: "name", yKeys: ["value"], sourceTable: lineT.tableName });
@@ -327,7 +327,7 @@ export async function generateReport(): Promise<ReportData> {
     if (scatT && scatT.numericCols.length >= 2) {
       usedTables.add(scatT.tableName);
       const data = buildScatterChart(scatT.rows, scatT.numericCols[0], scatT.numericCols[1]);
-      const insight = await getOllamaInsight(
+      const insight = await getAIInsight(
         `Analyze this scatter plot from table "${scatT.tableName}" comparing "${scatT.numericCols[0].name}" vs "${scatT.numericCols[1].name}". Sample: ${JSON.stringify(data.slice(0, 5))}. Write 1-2 sentences about correlation.`
       );
       charts.push({ id: "scatter", title: `${scatT.numericCols[0].name} vs ${scatT.numericCols[1].name} — ${scatT.tableName}`, type: "scatter", data, insight, xKey: "x", yKeys: ["y"], sourceTable: scatT.tableName });
@@ -340,7 +340,7 @@ export async function generateReport(): Promise<ReportData> {
       const { categoricalCols: cc, numericCols: nc } = stackT;
       if (cc.length >= 2 && nc.length > 0) {
         const { data, subKeys } = buildStackedBarChart(stackT.rows, cc[0], cc[1], nc[0]);
-        const insight = await getOllamaInsight(
+        const insight = await getAIInsight(
           `Analyze stacked bar from "${stackT.tableName}" showing "${nc[0].name}" by "${cc[0].name}" & "${cc[1].name}". Categories: ${subKeys.join(", ")}. Data: ${JSON.stringify(data.slice(0, 3))}. Write 1-2 sentences about dominant segments.`
         );
         charts.push({ id: "stackedBar", title: `${nc[0].name} Breakdown — ${stackT.tableName}`, type: "stackedBar", data, insight, xKey: "name", yKeys: subKeys, sourceTable: stackT.tableName });
@@ -358,7 +358,7 @@ export async function generateReport(): Promise<ReportData> {
           for (const sk of subKeys) pt[sk] = Math.round((vals[sk] || 0) * 100) / 100;
           return pt;
         });
-        const insight = await getOllamaInsight(`Analyze stacked bar from "${stackT.tableName}" with metrics ${subKeys.join(", ")} by "${catCol.name}". Write 1-2 sentences.`);
+        const insight = await getAIInsight(`Analyze stacked bar from "${stackT.tableName}" with metrics ${subKeys.join(", ")} by "${catCol.name}". Write 1-2 sentences.`);
         charts.push({ id: "stackedBar", title: `Metrics — ${stackT.tableName}`, type: "stackedBar", data, insight, xKey: "name", yKeys: subKeys, sourceTable: stackT.tableName });
       }
     }
@@ -369,7 +369,7 @@ export async function generateReport(): Promise<ReportData> {
       usedTables.add(radarT.tableName);
       const data = buildRadarChart(radarT.rows, radarT.categoricalCols[0], radarT.numericCols);
       const categoryKeys = Object.keys(data[0] || {}).filter(k => k !== "name" && k !== "value");
-      const insight = await getOllamaInsight(
+      const insight = await getAIInsight(
         `Analyze radar chart from "${radarT.tableName}" comparing averages. Axes: ${data.map(d => d.name).join(", ")}. Categories: ${categoryKeys.join(", ")}. Write 1-2 sentences about best performing category.`
       );
       charts.push({ id: "radar", title: `Feature Comparison — ${radarT.tableName}`, type: "radar", data, insight, xKey: "name", yKeys: categoryKeys, sourceTable: radarT.tableName });
@@ -380,7 +380,7 @@ export async function generateReport(): Promise<ReportData> {
         const avg = values.reduce((s: number, v: number) => s + v, 0) / values.length;
         return { name: nc.name, value: Math.round(avg * 100) / 100, Average: Math.round(avg * 100) / 100 };
       });
-      const insight = await getOllamaInsight(`Analyze averages from "${radarT.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences.`);
+      const insight = await getAIInsight(`Analyze averages from "${radarT.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences.`);
       charts.push({ id: "radar", title: `Averages — ${radarT.tableName}`, type: "radar", data, insight, xKey: "name", yKeys: ["Average"], sourceTable: radarT.tableName });
     }
 
@@ -391,7 +391,7 @@ export async function generateReport(): Promise<ReportData> {
       const data = p.columns.slice(0, 6).map(c => ({
         name: c.name, value: p.rows.filter((r: any) => r[c.name] != null).length,
       }));
-      const insight = await getOllamaInsight(`Analyze data quality for "${p.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences.`);
+      const insight = await getAIInsight(`Analyze data quality for "${p.tableName}": ${JSON.stringify(data)}. Write 1-2 sentences.`);
       charts.push({
         id: `extra_${charts.length}`, title: `Data Quality — ${p.tableName}`,
         type: charts.length % 2 === 0 ? "bar" : "pie",

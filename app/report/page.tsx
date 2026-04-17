@@ -1,7 +1,7 @@
 "use client";
 
 import { Sidebar } from "@/components/sidebar";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { generateReport, type ChartConfig, type ReportData } from "@/app/api/backend/report";
 import {
@@ -290,6 +290,54 @@ function SkeletonCard({ index }: { index: number }) {
 // ─── Main Page ──────────────────────────────────────────────────────────────
 
 export default function ReportPage() {
+  // Inject print styles
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      [data-print="true"] {
+        background-color: white !important;
+        color: black !important;
+        padding: 0px !important;
+        width: 800px !important; /* Fixed width for consistent capture */
+      }
+      [data-print="true"] .border-zinc-800, 
+      [data-print="true"] .border-b, 
+      [data-print="true"] .border-t {
+        border-color: #e5e7eb !important;
+      }
+      [data-print="true"] .text-zinc-100,
+      [data-print="true"] .text-zinc-200,
+      [data-print="true"] .text-zinc-300,
+      [data-print="true"] h2, h3 {
+        color: #111827 !important;
+      }
+      [data-print="true"] .text-zinc-400,
+      [data-print="true"] .text-zinc-500,
+      [data-print="true"] .text-zinc-600 {
+        color: #4b5563 !important;
+      }
+      [data-print="true"] .bg-zinc-950/50,
+      [data-print="true"] .bg-zinc-900/30,
+      [data-print="true"] .bg-teal-500/5,
+      [data-print="true"] .bg-indigo-500/5 {
+        background-color: transparent !important;
+      }
+      [data-print="true"] .recharts-cartesian-grid-horizontal line,
+      [data-print="true"] .recharts-cartesian-grid-vertical line {
+        stroke: #e5e7eb !important;
+      }
+      [data-print="true"] .recharts-text {
+        fill: #6b7280 !important;
+      }
+      [data-print="true"] .group {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
+  }, []);
+
   const { isLoading: authLoading } = useAuth();
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -310,44 +358,72 @@ export default function ReportPage() {
   };
 
   const handleDownloadPDF = async () => {
-    if (!reportRef.current) return;
+    if (!reportRef.current || !reportData) return;
     setIsDownloading(true);
 
     try {
       const html2canvas = (await import("html2canvas")).default;
       const { jsPDF } = await import("jspdf");
 
-      const element = reportRef.current;
-
-      // Capture the report section
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#09090b",
-        logging: false,
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const reportElement = reportRef.current;
+      
+      // 1. Temporarily apply print styles
+      reportElement.setAttribute("data-print", "true");
+      // Force a small delay to ensure styles are applied
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const pdf = new jsPDF("p", "mm", "a4");
-      let heightLeft = imgHeight;
-      let position = 0;
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const margin = 15;
+      const contentWidth = pageWidth - (margin * 2);
+      let currentY = margin;
 
-      // First page
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      // Add more pages if content overflows
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+      // 2. Capture Header
+      const header = reportElement.querySelector(":scope > div:first-child") as HTMLElement;
+      if (header) {
+        const canvas = await html2canvas(header, { scale: 2, backgroundColor: "#ffffff" });
+        const imgHeight = (canvas.height * contentWidth) / canvas.width;
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
+        currentY += imgHeight + 10;
       }
 
+      // 3. Capture Charts
+      const chartsGrid = reportElement.querySelector(".grid") as HTMLElement;
+      const chartCards = chartsGrid?.querySelectorAll(":scope > div") || [];
+      
+      for (let i = 0; i < chartCards.length; i++) {
+        const card = chartCards[i] as HTMLElement;
+        const canvas = await html2canvas(card, { scale: 2, backgroundColor: "#ffffff" });
+        const imgHeight = (canvas.height * contentWidth) / canvas.width;
+
+        // Check if we need a new page
+        if (currentY + imgHeight > pageHeight - margin) {
+          pdf.addPage();
+          currentY = margin;
+        }
+
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
+        currentY += imgHeight + 10;
+      }
+
+      // 4. Capture Footer
+      const footer = reportElement.querySelector(":scope > div:last-child") as HTMLElement;
+      if (footer && footer !== header && footer !== chartsGrid) {
+        const canvas = await html2canvas(footer, { scale: 2, backgroundColor: "#ffffff" });
+        const imgHeight = (canvas.height * contentWidth) / canvas.width;
+        
+        if (currentY + imgHeight > pageHeight - margin) {
+          pdf.addPage();
+          currentY = margin;
+        }
+        
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
+      }
+
+      // 5. Cleanup and Save
+      reportElement.removeAttribute("data-print");
+      
       const timestamp = new Date().toISOString().split("T")[0];
       pdf.save(`Data_Report_${reportData?.tableNames?.join("_") || "report"}_${timestamp}.pdf`);
     } catch (err) {
@@ -441,7 +517,7 @@ export default function ReportPage() {
               <p className="text-sm text-zinc-500 max-w-md mb-8 leading-relaxed">
                 Click the button above to analyze your connected database. The report
                 will include 6 automated charts with AI-generated insights powered by
-                Ollama.
+                local LLM technology.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 {["Bar Chart", "Pie Chart", "Line Chart", "Scatter Plot", "Stacked Bar", "Radar Chart"].map((type, i) => {
@@ -466,7 +542,7 @@ export default function ReportPage() {
                 <div>
                   <p className="text-sm font-medium text-zinc-300">Analyzing your data...</p>
                   <p className="text-xs text-zinc-600">
-                    Fetching data, generating charts, and getting AI insights from Ollama
+                    Fetching data, generating charts, and getting AI insights...
                   </p>
                 </div>
               </div>
@@ -522,7 +598,7 @@ export default function ReportPage() {
                   </div>
                   <div className="flex items-center gap-2 px-3 py-1.5 border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-400">
                     <Sparkles size={12} />
-                    AI Insights by Ollama
+                    Automated AI Insights
                   </div>
                 </div>
               </div>
@@ -537,7 +613,7 @@ export default function ReportPage() {
               {/* Footer */}
               <div className="mt-8 pt-5 border-t border-zinc-800 text-center">
                 <p className="text-xs text-zinc-600">
-                  Generated by QueryGen • AI insights powered by Ollama (llama3.2) • {new Date().toLocaleString()}
+                  Generated by QueryGen • AI insights powered by local LLM • {new Date().toLocaleString()}
                 </p>
               </div>
             </div>
