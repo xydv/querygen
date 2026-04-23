@@ -219,18 +219,18 @@ function ChartCard({ chart, index }: { chart: ChartConfig; index: number }) {
   };
 
   return (
-    <div className="group border border-zinc-800 bg-zinc-950/50 hover:border-zinc-700 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5">
+    <div className="group border border-border bg-card hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
       {/* Card Header */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-zinc-800/50">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-border/50">
         <div
           className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
           style={{ background: `linear-gradient(135deg, ${GRADIENT_PAIRS[index % GRADIENT_PAIRS.length][0]}22, ${GRADIENT_PAIRS[index % GRADIENT_PAIRS.length][1]}22)` }}
         >
           <Icon size={16} style={{ color: GRADIENT_PAIRS[index % GRADIENT_PAIRS.length][0] }} />
         </div>
-        <h3 className="text-sm font-semibold text-zinc-200 truncate flex-1">{chart.title}</h3>
+        <h3 className="text-sm font-semibold text-card-foreground truncate flex-1 ml-1">{chart.title}</h3>
         {chart.sourceTable && (
-          <span className="flex items-center gap-1 text-[10px] font-medium text-teal-400 border border-teal-500/20 bg-teal-500/5 px-2 py-0.5 shrink-0 rounded-sm">
+          <span className="flex items-center gap-1 text-[10px] font-medium text-teal-600 dark:text-teal-400 border border-teal-500/20 bg-teal-500/5 px-2 py-0.5 shrink-0 rounded-sm">
             <Database size={9} />
             {chart.sourceTable}
           </span>
@@ -243,12 +243,12 @@ function ChartCard({ chart, index }: { chart: ChartConfig; index: number }) {
       </div>
 
       {/* AI Insight */}
-      <div className="px-5 py-4 border-t border-zinc-800/50 bg-zinc-900/30">
+      <div className="px-5 py-4 border-t border-border/50 bg-muted/30">
         <div className="flex items-start gap-2">
-          <div className="flex items-center justify-center w-5 h-5 mt-0.5 rounded-md bg-indigo-500/10 shrink-0">
-            <Sparkles size={11} className="text-indigo-400" />
+          <div className="flex items-center justify-center w-5 h-5 mt-0.5 rounded-md bg-primary/10 shrink-0">
+            <Sparkles size={11} className="text-primary" />
           </div>
-          <p className="text-xs text-zinc-400 leading-relaxed">
+          <p className="text-xs text-muted-foreground leading-relaxed">
             {chart.insight}
           </p>
         </div>
@@ -261,25 +261,25 @@ function ChartCard({ chart, index }: { chart: ChartConfig; index: number }) {
 
 function SkeletonCard({ index }: { index: number }) {
   return (
-    <div className="border border-zinc-800 bg-zinc-950/50 animate-pulse">
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-zinc-800/50">
-        <div className="w-8 h-8 rounded-lg bg-zinc-800" />
-        <div className="h-4 w-32 bg-zinc-800 rounded" />
+    <div className="border border-border bg-card animate-pulse rounded-xl overflow-hidden">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-border/50">
+        <div className="w-8 h-8 rounded-lg bg-muted" />
+        <div className="h-4 w-32 bg-muted rounded" />
       </div>
       <div className="px-3 py-4">
-        <div className="h-[260px] bg-zinc-900/50 rounded flex items-center justify-center">
+        <div className="h-[260px] bg-muted/30 rounded flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <Loader2 size={24} className="text-indigo-500/50 animate-spin" />
-            <span className="text-xs text-zinc-600">Generating chart {index + 1}...</span>
+            <Loader2 size={24} className="text-primary/30 animate-spin" />
+            <span className="text-xs text-muted-foreground italic">Generating chart {index + 1}...</span>
           </div>
         </div>
       </div>
-      <div className="px-5 py-4 border-t border-zinc-800/50 bg-zinc-900/30">
+      <div className="px-5 py-4 border-t border-border/50 bg-muted/20">
         <div className="flex items-start gap-2">
-          <div className="w-5 h-5 rounded-md bg-zinc-800 shrink-0" />
+          <div className="w-5 h-5 rounded-md bg-muted shrink-0" />
           <div className="space-y-2 flex-1">
-            <div className="h-3 w-full bg-zinc-800 rounded" />
-            <div className="h-3 w-3/4 bg-zinc-800 rounded" />
+            <div className="h-3 w-full bg-muted rounded" />
+            <div className="h-3 w-3/4 bg-muted rounded" />
           </div>
         </div>
       </div>
@@ -297,41 +297,95 @@ export default function ReportPage() {
       [data-print="true"] {
         background-color: white !important;
         color: black !important;
-        padding: 0px !important;
-        width: 800px !important; /* Fixed width for consistent capture */
+        position: relative !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        padding-bottom: 50px !important;
       }
-      [data-print="true"] .border-zinc-800, 
-      [data-print="true"] .border-b, 
-      [data-print="true"] .border-t {
-        border-color: #e5e7eb !important;
+      [data-print="true"] h1, [data-print="true"] h2, [data-print="true"] h3, [data-print="true"] p, [data-print="true"] span:not([class*="text-"]) {
+        color: black !important;
       }
-      [data-print="true"] .text-zinc-100,
-      [data-print="true"] .text-zinc-200,
-      [data-print="true"] .text-zinc-300,
-      [data-print="true"] h2, h3 {
-        color: #111827 !important;
+      [data-print="true"] .bg-zinc-950,
+      [data-print="true"] .bg-zinc-950\\/50,
+      [data-print="true"] .bg-zinc-900,
+      [data-print="true"] .bg-zinc-900\\/30,
+      [data-print="true"] .bg-zinc-900\\/50,
+      [data-print="true"] .bg-background {
+        background-color: #ffffff !important;
       }
-      [data-print="true"] .text-zinc-400,
-      [data-print="true"] .text-zinc-500,
-      [data-print="true"] .text-zinc-600 {
-        color: #4b5563 !important;
+      [data-print="true"] .border-zinc-800,
+      [data-print="true"] .border-zinc-700,
+      [data-print="true"] .border-border {
+        border-color: #f3f4f6 !important;
       }
-      [data-print="true"] .bg-zinc-950/50,
-      [data-print="true"] .bg-zinc-900/30,
-      [data-print="true"] .bg-teal-500/5,
-      [data-print="true"] .bg-indigo-500/5 {
-        background-color: transparent !important;
+      [data-print="true"] .truncate {
+        overflow: visible !important;
+        white-space: normal !important;
+        text-overflow: clip !important;
+        display: block !important;
+      }
+      [data-print="true"] .flex-1 {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+      }
+      [data-print="true"] .recharts-responsive-container {
+        height: 350px !important;
+        width: 100% !important;
       }
       [data-print="true"] .recharts-cartesian-grid-horizontal line,
       [data-print="true"] .recharts-cartesian-grid-vertical line {
-        stroke: #e5e7eb !important;
+        stroke: #f3f4f6 !important;
+      }
+      [data-print="true"] p, [data-print="true"] h3 {
+        line-height: 1.6 !important;
       }
       [data-print="true"] .recharts-text {
         fill: #6b7280 !important;
+        font-size: 10px !important;
       }
+      [data-print="true"] .recharts-legend-item-text {
+        color: #4b5563 !important;
+      }
+      [data-print="true"] .bg-teal-500\\/5,
+      [data-print="true"] .bg-indigo-500\\/5,
+      [data-print="true"] [class*="bg-indigo-500\\/5"],
+      [data-print="true"] [class*="bg-teal-500\\/5"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 24px !important;
+        padding: 0 10px !important;
+        line-height: 24px !important;
+        gap: 6px !important;
+        vertical-align: middle !important;
+        white-space: nowrap !important;
+      }
+      [data-print="true"] .bg-teal-500\\/5 { background-color: #f0fdfa !important; border: 1px solid #ccfbf1 !important; }
+      [data-print="true"] .bg-indigo-500\\/5 { background-color: #eef2ff !important; border: 1px solid #e0e7ff !important; }
+      [data-print="true"] .bg-indigo-500\\/10 { background-color: #eef2ff !important; }
+
+      [data-print="true"] .flex.items-center.gap-1,
+      [data-print="true"] .flex.items-center.gap-2,
+      [data-print="true"] .flex.items-center.gap-3 {
+        display: flex !important;
+        align-items: center !important;
+      }
+      
+      [data-print="true"] svg {
+        display: inline-block !important;
+        vertical-align: middle !important;
+        margin-top: -1px !important; /* Micro-adjustment for baseline alignment */
+      }
+      
       [data-print="true"] .group {
-        box-shadow: none !important;
-        border-radius: 0 !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        margin-bottom: 30px !important;
+        border: 1px solid #f3f4f6 !important;
+        page-break-inside: avoid !important;
+        background-color: white !important;
+      }
+      [data-print="true"] h1, [data-print="true"] h2, [data-print="true"] h3 {
+        color: #000000 !important;
       }
     `;
     document.head.appendChild(style);
@@ -369,22 +423,53 @@ export default function ReportPage() {
       
       // 1. Temporarily apply print styles
       reportElement.setAttribute("data-print", "true");
-      // Force a small delay to ensure styles are applied
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Force a extra delay for Recharts to settle and styles to apply
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      const pdf = new jsPDF("p", "mm", "a4");
+      const pdf = new jsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: "a4",
+        compress: true
+      });
+
       const pageWidth = 210;
       const pageHeight = 297;
       const margin = 15;
       const contentWidth = pageWidth - (margin * 2);
       let currentY = margin;
 
+      const captureOptions = {
+        scale: 2.5, // 2.5 is a sweet spot for quality vs memory
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        windowWidth: 1000, // Slightly wider for better chart layout
+        onclone: (clonedDoc: Document) => {
+          const el = clonedDoc.querySelector('[data-print="true"]') as HTMLElement;
+          if (el) {
+            el.style.width = "1000px";
+            el.style.padding = "60px";
+            el.style.backgroundColor = "#ffffff";
+            
+            // Ensure any direct divs have padding to avoid clipping
+            const subElements = el.querySelectorAll(':scope > div');
+            subElements.forEach((s) => {
+              const element = s as HTMLElement;
+              element.style.padding = "10px 20px";
+              element.style.backgroundColor = "#ffffff";
+              element.style.overflow = "visible";
+            });
+          }
+        }
+      };
+
       // 2. Capture Header
       const header = reportElement.querySelector(":scope > div:first-child") as HTMLElement;
       if (header) {
-        const canvas = await html2canvas(header, { scale: 2, backgroundColor: "#ffffff" });
+        const canvas = await html2canvas(header, captureOptions);
         const imgHeight = (canvas.height * contentWidth) / canvas.width;
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", margin, currentY, contentWidth, imgHeight);
         currentY += imgHeight + 10;
       }
 
@@ -394,7 +479,7 @@ export default function ReportPage() {
       
       for (let i = 0; i < chartCards.length; i++) {
         const card = chartCards[i] as HTMLElement;
-        const canvas = await html2canvas(card, { scale: 2, backgroundColor: "#ffffff" });
+        const canvas = await html2canvas(card, captureOptions);
         const imgHeight = (canvas.height * contentWidth) / canvas.width;
 
         // Check if we need a new page
@@ -403,14 +488,16 @@ export default function ReportPage() {
           currentY = margin;
         }
 
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
-        currentY += imgHeight + 10;
+        // Use JPEG for faster generation and smaller file size if needed, 
+        // but PNG is safer for charts. For now using JPEG with high quality.
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.9), "JPEG", margin, currentY, contentWidth, imgHeight);
+        currentY += imgHeight + 8;
       }
 
       // 4. Capture Footer
       const footer = reportElement.querySelector(":scope > div:last-child") as HTMLElement;
       if (footer && footer !== header && footer !== chartsGrid) {
-        const canvas = await html2canvas(footer, { scale: 2, backgroundColor: "#ffffff" });
+        const canvas = await html2canvas(footer, captureOptions);
         const imgHeight = (canvas.height * contentWidth) / canvas.width;
         
         if (currentY + imgHeight > pageHeight - margin) {
@@ -418,14 +505,18 @@ export default function ReportPage() {
           currentY = margin;
         }
         
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", margin, currentY, contentWidth, imgHeight);
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.9), "JPEG", margin, currentY, contentWidth, imgHeight);
       }
 
       // 5. Cleanup and Save
       reportElement.removeAttribute("data-print");
       
       const timestamp = new Date().toISOString().split("T")[0];
-      pdf.save(`Data_Report_${reportData?.tableNames?.join("_") || "report"}_${timestamp}.pdf`);
+      const filename = reportData?.tableNames?.length 
+        ? `Report_${reportData.tableNames[0]}_${timestamp}.pdf` 
+        : `Data_Report_${timestamp}.pdf`;
+        
+      pdf.save(filename);
     } catch (err) {
       console.error("PDF generation error:", err);
       alert("Failed to generate PDF. Please try again.");
@@ -508,13 +599,13 @@ export default function ReportPage() {
           {/* Empty State */}
           {!isGenerating && !reportData && (
             <div className="flex flex-col items-center justify-center py-24 text-center">
-              <div className="w-20 h-20 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6">
-                <FileText size={36} className="text-indigo-400" />
+              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                <FileText size={36} className="text-primary" />
               </div>
-              <h2 className="text-xl font-semibold text-zinc-200 mb-2">
+              <h2 className="text-xl font-semibold text-foreground mb-2">
                 Generate Your Data Report
               </h2>
-              <p className="text-sm text-zinc-500 max-w-md mb-8 leading-relaxed">
+              <p className="text-sm text-muted-foreground max-w-md mb-8 leading-relaxed">
                 Click the button above to analyze your connected database. The report
                 will include 6 automated charts with AI-generated insights powered by
                 local LLM technology.
@@ -524,7 +615,7 @@ export default function ReportPage() {
                   const icons = [BarChart3, PieChart, TrendingUp, ScatterChart, Layers, Radar];
                   const Icon = icons[i];
                   return (
-                    <div key={type} className="flex items-center gap-2 px-3 py-1.5 border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-500">
+                    <div key={type} className="flex items-center gap-2 px-3 py-1.5 border border-border bg-muted/50 text-xs text-muted-foreground rounded-lg">
                       <Icon size={12} />
                       {type}
                     </div>
@@ -538,10 +629,10 @@ export default function ReportPage() {
           {isGenerating && (
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <Loader2 size={18} className="text-indigo-400 animate-spin" />
+                <Loader2 size={18} className="text-primary animate-spin" />
                 <div>
-                  <p className="text-sm font-medium text-zinc-300">Analyzing your data...</p>
-                  <p className="text-xs text-zinc-600">
+                  <p className="text-sm font-medium text-foreground">Analyzing your data...</p>
+                  <p className="text-xs text-muted-foreground">
                     Fetching data, generating charts, and getting AI insights...
                   </p>
                 </div>
@@ -578,25 +669,25 @@ export default function ReportPage() {
           {reportData?.success && reportData.charts && (
             <div ref={reportRef}>
               {/* Report Header */}
-              <div className="mb-6 pb-5 border-b border-zinc-800">
+              <div className="mb-6 pb-5 border-b border-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-bold text-zinc-100">
+                    <h2 className="text-lg font-bold text-foreground">
                       Multi-Table Report
                     </h2>
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
                       {reportData.tableNames?.map((t) => (
-                        <span key={t} className="flex items-center gap-1 text-[11px] font-medium text-teal-400 border border-teal-500/20 bg-teal-500/5 px-2 py-0.5">
+                        <span key={t} className="flex items-center gap-1 text-[11px] font-medium text-teal-600 dark:text-teal-400 border border-teal-500/20 bg-teal-500/5 px-2 py-0.5 rounded-md">
                           <Database size={10} />
                           {t}
                         </span>
                       ))}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {reportData.totalRows?.toLocaleString()} total rows across {reportData.tableNames?.length || 0} tables • {reportData.charts.length} charts • {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-400">
+                  <div className="flex items-center gap-2 px-3 py-1.5 border border-primary/20 bg-primary/5 text-xs text-primary rounded-lg">
                     <Sparkles size={12} />
                     Automated AI Insights
                   </div>
