@@ -228,12 +228,12 @@ export default function Home() {
       prev.map((m) =>
         m.id === messageId && m.queryResult
           ? {
-              ...m,
-              queryResult: {
-                ...m.queryResult,
-                expanded: !m.queryResult.expanded,
-              },
-            }
+            ...m,
+            queryResult: {
+              ...m.queryResult,
+              expanded: !m.queryResult.expanded,
+            },
+          }
           : m,
       ),
     );
@@ -281,13 +281,13 @@ export default function Home() {
       prev.map((m) =>
         m.id === messageId && m.feedback
           ? {
-              ...m,
-              feedback: {
-                ...m.feedback,
-                status: "submitted",
-                submitting: false,
-              },
-            }
+            ...m,
+            feedback: {
+              ...m.feedback,
+              status: "submitted",
+              submitting: false,
+            },
+          }
           : m,
       ),
     );
@@ -360,11 +360,10 @@ export default function Home() {
                 >
                   {/* Bubble */}
                   <div
-                    className={`px-4 py-3 ${
-                      message.type === "user"
+                    className={`px-4 py-3 ${message.type === "user"
                         ? "bg-primary text-primary-foreground max-w-2xl"
                         : "border border-border bg-secondary text-foreground w-full"
-                    }`}
+                      }`}
                   >
                     <MessageContent
                       content={message.content}
