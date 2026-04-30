@@ -12,14 +12,14 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/dashboard");
+      router.push("/");
     }
   }, [status, router]);
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     const result = await signIn("google", {
-      callbackUrl: "/dashboard", // Where to go after success
+      callbackUrl: "/", // Where to go after success
       redirect: true,
     });
 
@@ -27,7 +27,7 @@ export default function LoginPage() {
       setIsLoading(false);
       // Handle error (e.g., toast notification)
     } else {
-      router.push("/dashboard");
+      router.push("/");
     }
   };
 

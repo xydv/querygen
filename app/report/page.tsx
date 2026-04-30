@@ -420,7 +420,7 @@ export default function ReportPage() {
       const { jsPDF } = await import("jspdf");
 
       const reportElement = reportRef.current;
-      
+
       // 1. Temporarily apply print styles
       reportElement.setAttribute("data-print", "true");
       // Force a extra delay for Recharts to settle and styles to apply
@@ -451,7 +451,7 @@ export default function ReportPage() {
             el.style.width = "1000px";
             el.style.padding = "60px";
             el.style.backgroundColor = "#ffffff";
-            
+
             // Ensure any direct divs have padding to avoid clipping
             const subElements = el.querySelectorAll(':scope > div');
             subElements.forEach((s) => {
@@ -476,7 +476,7 @@ export default function ReportPage() {
       // 3. Capture Charts
       const chartsGrid = reportElement.querySelector(".grid") as HTMLElement;
       const chartCards = chartsGrid?.querySelectorAll(":scope > div") || [];
-      
+
       for (let i = 0; i < chartCards.length; i++) {
         const card = chartCards[i] as HTMLElement;
         const canvas = await html2canvas(card, captureOptions);
@@ -499,23 +499,23 @@ export default function ReportPage() {
       if (footer && footer !== header && footer !== chartsGrid) {
         const canvas = await html2canvas(footer, captureOptions);
         const imgHeight = (canvas.height * contentWidth) / canvas.width;
-        
+
         if (currentY + imgHeight > pageHeight - margin) {
           pdf.addPage();
           currentY = margin;
         }
-        
+
         pdf.addImage(canvas.toDataURL("image/jpeg", 0.9), "JPEG", margin, currentY, contentWidth, imgHeight);
       }
 
       // 5. Cleanup and Save
       reportElement.removeAttribute("data-print");
-      
+
       const timestamp = new Date().toISOString().split("T")[0];
-      const filename = reportData?.tableNames?.length 
-        ? `Report_${reportData.tableNames[0]}_${timestamp}.pdf` 
+      const filename = reportData?.tableNames?.length
+        ? `Report_${reportData.tableNames[0]}_${timestamp}.pdf`
         : `Data_Report_${timestamp}.pdf`;
-        
+
       pdf.save(filename);
     } catch (err) {
       console.error("PDF generation error:", err);

@@ -29,10 +29,9 @@ export function Sidebar() {
   const isAdmin = role === "admin";
 
   const links = [
-    { href: '/', label: 'Query', icon: Home },
+    { href: '/', label: 'Chat', icon: Home },
     { href: '/database', label: 'Database', icon: Database },
     { href: '/history', label: 'History', icon: History },
-    { href: '/dashboard', label: 'Dashboard', icon: BarChart3 },
     { href: '/report', label: 'Report', icon: FileText },
     { href: '/settings', label: 'Settings', icon: Settings },
     ...(isAdmin ? [{ href: '/admin', label: 'Admin Panel', icon: ShieldCheck }] : []),
