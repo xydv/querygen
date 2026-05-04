@@ -24,7 +24,7 @@ export default function Settings() {
         const savedUrl = await getConnectionUrl()
         setApiKey(savedUrl)
       } catch {
-        setApiKey('mysql://test_readernew:dcb7bc8caf37a64bec926a9b2185de3144b09eea@mednzz.h.filess.io:3306/test_readernew')
+        setApiKey('mysql://\new:dcb7bc8caf37a64bec926a9b2185de3144b09eea@mednzz.h.filess.io:3306/test_readernew')
       } finally {
         setIsLoadingUrl(false)
       }

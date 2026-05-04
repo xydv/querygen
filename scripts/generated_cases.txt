@@ -1,0 +1,388 @@
+
+  {
+    name: "Auto BAR 1",
+    data: [
+      { name: "Cat0A", value: 305 },
+      { name: "Cat0B", value: 32 },
+      { name: "Cat0C", value: 79 },
+      { name: "Cat0D", value: 199 },
+      { name: "Cat0E", value: 721 },
+      { name: "Cat0F", value: 613 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 721,
+    expectedLowestValue: 32,
+    expectedHighestCat: "Cat0E",
+    expectedLowestCat: "Cat0B"
+  },
+  {
+    name: "Auto PIE 2",
+    data: [
+      { name: "Cat1A", value: 381 },
+      { name: "Cat1B", value: 85 },
+      { name: "Cat1C", value: 359 },
+      { name: "Cat1D", value: 617 },
+      { name: "Cat1E", value: 267 },
+      { name: "Cat1F", value: 642 },
+      { name: "Cat1G", value: 63 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 642,
+    expectedLowestValue: 63,
+    expectedHighestCat: "Cat1F",
+    expectedLowestCat: "Cat1G"
+  },
+  {
+    name: "Auto LINE 3",
+    data: [
+      { name: "Cat2A", value: 346 },
+      { name: "Cat2B", value: 780 },
+      { name: "Cat2C", value: 251 },
+      { name: "Cat2D", value: 412 },
+      { name: "Cat2E", value: 247 },
+      { name: "Cat2F", value: 685 },
+      { name: "Cat2G", value: 414 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 780,
+    expectedLowestValue: 247,
+    expectedHighestCat: "Cat2B",
+    expectedLowestCat: "Cat2E"
+  },
+  {
+    name: "Auto SCATTER 4",
+    data: [
+      { name: "Cat3A", x: 67, y: 582 },
+      { name: "Cat3B", x: 91, y: 795 },
+      { name: "Cat3C", x: 40, y: 885 },
+      { name: "Cat3D", x: 68, y: 854 },
+      { name: "Cat3E", x: 40, y: 313 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 885,
+    expectedLowestValue: 313,
+    expectedHighestCat: "Cat3C",
+    expectedLowestCat: "Cat3E"
+  },
+  {
+    name: "Auto BAR 5",
+    data: [
+      { name: "Cat4A", value: 770 },
+      { name: "Cat4B", value: 198 },
+      { name: "Cat4C", value: 294 },
+      { name: "Cat4D", value: 524 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 770,
+    expectedLowestValue: 198,
+    expectedHighestCat: "Cat4A",
+    expectedLowestCat: "Cat4B"
+  },
+  {
+    name: "Auto PIE 6",
+    data: [
+      { name: "Cat5A", value: 631 },
+      { name: "Cat5B", value: 413 },
+      { name: "Cat5C", value: 465 },
+      { name: "Cat5D", value: 687 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 687,
+    expectedLowestValue: 413,
+    expectedHighestCat: "Cat5D",
+    expectedLowestCat: "Cat5B"
+  },
+  {
+    name: "Auto LINE 7",
+    data: [
+      { name: "Cat6A", value: 692 },
+      { name: "Cat6B", value: 255 },
+      { name: "Cat6C", value: 371 },
+      { name: "Cat6D", value: 638 },
+      { name: "Cat6E", value: 457 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 692,
+    expectedLowestValue: 255,
+    expectedHighestCat: "Cat6A",
+    expectedLowestCat: "Cat6B"
+  },
+  {
+    name: "Auto SCATTER 8",
+    data: [
+      { name: "Cat7A", x: 4, y: 35 },
+      { name: "Cat7B", x: 48, y: 642 },
+      { name: "Cat7C", x: 15, y: 432 },
+      { name: "Cat7D", x: 33, y: 262 },
+      { name: "Cat7E", x: 50, y: 21 },
+      { name: "Cat7F", x: 99, y: 655 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 655,
+    expectedLowestValue: 21,
+    expectedHighestCat: "Cat7F",
+    expectedLowestCat: "Cat7E"
+  },
+  {
+    name: "Auto BAR 9",
+    data: [
+      { name: "Cat8A", value: 117 },
+      { name: "Cat8B", value: 329 },
+      { name: "Cat8C", value: 604 },
+      { name: "Cat8D", value: 177 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 604,
+    expectedLowestValue: 117,
+    expectedHighestCat: "Cat8C",
+    expectedLowestCat: "Cat8A"
+  },
+  {
+    name: "Auto PIE 10",
+    data: [
+      { name: "Cat9A", value: 336 },
+      { name: "Cat9B", value: 683 },
+      { name: "Cat9C", value: 904 },
+      { name: "Cat9D", value: 890 },
+      { name: "Cat9E", value: 144 },
+      { name: "Cat9F", value: 415 },
+      { name: "Cat9G", value: 703 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 904,
+    expectedLowestValue: 144,
+    expectedHighestCat: "Cat9C",
+    expectedLowestCat: "Cat9E"
+  },
+  {
+    name: "Auto LINE 11",
+    data: [
+      { name: "Cat10A", value: 357 },
+      { name: "Cat10B", value: 65 },
+      { name: "Cat10C", value: 466 },
+      { name: "Cat10D", value: 39 },
+      { name: "Cat10E", value: 569 },
+      { name: "Cat10F", value: 836 },
+      { name: "Cat10G", value: 172 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 836,
+    expectedLowestValue: 39,
+    expectedHighestCat: "Cat10F",
+    expectedLowestCat: "Cat10D"
+  },
+  {
+    name: "Auto SCATTER 12",
+    data: [
+      { name: "Cat11A", x: 23, y: 174 },
+      { name: "Cat11B", x: 44, y: 436 },
+      { name: "Cat11C", x: 43, y: 317 },
+      { name: "Cat11D", x: 66, y: 603 },
+      { name: "Cat11E", x: 28, y: 597 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 603,
+    expectedLowestValue: 174,
+    expectedHighestCat: "Cat11D",
+    expectedLowestCat: "Cat11A"
+  },
+  {
+    name: "Auto BAR 13",
+    data: [
+      { name: "Cat12A", value: 45 },
+      { name: "Cat12B", value: 194 },
+      { name: "Cat12C", value: 20 },
+      { name: "Cat12D", value: 238 },
+      { name: "Cat12E", value: 129 },
+      { name: "Cat12F", value: 533 },
+      { name: "Cat12G", value: 550 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 550,
+    expectedLowestValue: 20,
+    expectedHighestCat: "Cat12G",
+    expectedLowestCat: "Cat12C"
+  },
+  {
+    name: "Auto PIE 14",
+    data: [
+      { name: "Cat13A", value: 27 },
+      { name: "Cat13B", value: 808 },
+      { name: "Cat13C", value: 86 },
+      { name: "Cat13D", value: 406 },
+      { name: "Cat13E", value: 899 },
+      { name: "Cat13F", value: 235 },
+      { name: "Cat13G", value: 187 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 899,
+    expectedLowestValue: 27,
+    expectedHighestCat: "Cat13E",
+    expectedLowestCat: "Cat13A"
+  },
+  {
+    name: "Auto LINE 15",
+    data: [
+      { name: "Cat14A", value: 712 },
+      { name: "Cat14B", value: 536 },
+      { name: "Cat14C", value: 153 },
+      { name: "Cat14D", value: 807 },
+      { name: "Cat14E", value: 562 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 807,
+    expectedLowestValue: 153,
+    expectedHighestCat: "Cat14D",
+    expectedLowestCat: "Cat14C"
+  },
+  {
+    name: "Auto SCATTER 16",
+    data: [
+      { name: "Cat15A", x: 79, y: 504 },
+      { name: "Cat15B", x: 32, y: 230 },
+      { name: "Cat15C", x: 55, y: 761 },
+      { name: "Cat15D", x: 90, y: 167 },
+      { name: "Cat15E", x: 24, y: 524 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 761,
+    expectedLowestValue: 167,
+    expectedHighestCat: "Cat15C",
+    expectedLowestCat: "Cat15D"
+  },
+  {
+    name: "Auto BAR 17",
+    data: [
+      { name: "Cat16A", value: 755 },
+      { name: "Cat16B", value: 228 },
+      { name: "Cat16C", value: 790 },
+      { name: "Cat16D", value: 880 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 880,
+    expectedLowestValue: 228,
+    expectedHighestCat: "Cat16D",
+    expectedLowestCat: "Cat16B"
+  },
+  {
+    name: "Auto PIE 18",
+    data: [
+      { name: "Cat17A", value: 758 },
+      { name: "Cat17B", value: 243 },
+      { name: "Cat17C", value: 239 },
+      { name: "Cat17D", value: 558 },
+      { name: "Cat17E", value: 392 },
+      { name: "Cat17F", value: 705 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 758,
+    expectedLowestValue: 239,
+    expectedHighestCat: "Cat17A",
+    expectedLowestCat: "Cat17C"
+  },
+  {
+    name: "Auto LINE 19",
+    data: [
+      { name: "Cat18A", value: 355 },
+      { name: "Cat18B", value: 547 },
+      { name: "Cat18C", value: 565 },
+      { name: "Cat18D", value: 707 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 707,
+    expectedLowestValue: 355,
+    expectedHighestCat: "Cat18D",
+    expectedLowestCat: "Cat18A"
+  },
+  {
+    name: "Auto SCATTER 20",
+    data: [
+      { name: "Cat19A", x: 4, y: 414 },
+      { name: "Cat19B", x: 50, y: 402 },
+      { name: "Cat19C", x: 26, y: 103 },
+      { name: "Cat19D", x: 6, y: 233 },
+      { name: "Cat19E", x: 51, y: 678 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 678,
+    expectedLowestValue: 103,
+    expectedHighestCat: "Cat19E",
+    expectedLowestCat: "Cat19C"
+  },
+  {
+    name: "Auto BAR 21",
+    data: [
+      { name: "Cat20A", value: 469 },
+      { name: "Cat20B", value: 749 },
+      { name: "Cat20C", value: 494 },
+      { name: "Cat20D", value: 383 },
+      { name: "Cat20E", value: 80 },
+      { name: "Cat20F", value: 283 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 749,
+    expectedLowestValue: 80,
+    expectedHighestCat: "Cat20B",
+    expectedLowestCat: "Cat20E"
+  },
+  {
+    name: "Auto PIE 22",
+    data: [
+      { name: "Cat21A", value: 625 },
+      { name: "Cat21B", value: 239 },
+      { name: "Cat21C", value: 422 },
+      { name: "Cat21D", value: 16 },
+      { name: "Cat21E", value: 142 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "sales" showing distribution of "Region". Data: ${d}. Write 1-2 sentences about which category is most and least common with exact counts.`,
+    expectedHighestValue: 625,
+    expectedLowestValue: 16,
+    expectedHighestCat: "Cat21A",
+    expectedLowestCat: "Cat21D"
+  },
+  {
+    name: "Auto LINE 23",
+    data: [
+      { name: "Cat22A", value: 819 },
+      { name: "Cat22B", value: 289 },
+      { name: "Cat22C", value: 140 },
+      { name: "Cat22D", value: 112 },
+      { name: "Cat22E", value: 808 },
+      { name: "Cat22F", value: 717 }
+    ],
+    promptTemplate: (d) => `Analyze this sequential dataset from table "revenue" showing "Amount" over "Month". Data: ${d}. Write 1-2 sentences about trends, peaks and dips.`,
+    expectedHighestValue: 819,
+    expectedLowestValue: 112,
+    expectedHighestCat: "Cat22A",
+    expectedLowestCat: "Cat22D"
+  },
+  {
+    name: "Auto SCATTER 24",
+    data: [
+      { name: "Cat23A", x: 46, y: 496 },
+      { name: "Cat23B", x: 4, y: 645 },
+      { name: "Cat23C", x: 24, y: 474 },
+      { name: "Cat23D", x: 32, y: 596 },
+      { name: "Cat23E", x: 90, y: 696 },
+      { name: "Cat23F", x: 64, y: 592 }
+    ],
+    promptTemplate: (d) => `Analyze this paired dataset from table "metrics" comparing "Age" vs "Score". Sample: ${d}. Write 1-2 sentences about the highest and lowest data points.`,
+    expectedHighestValue: 696,
+    expectedLowestValue: 474,
+    expectedHighestCat: "Cat23E",
+    expectedLowestCat: "Cat23C"
+  },
+  {
+    name: "Auto BAR 25",
+    data: [
+      { name: "Cat24A", value: 660 },
+      { name: "Cat24B", value: 204 },
+      { name: "Cat24C", value: 323 },
+      { name: "Cat24D", value: 227 }
+    ],
+    promptTemplate: (d) => `Analyze this dataset from table "goods" showing "Price" grouped by "Id". Data: ${d}. Write exactly 1-2 sentences highlighting the most important findings from this dataset.`,
+    expectedHighestValue: 660,
+    expectedLowestValue: 204,
+    expectedHighestCat: "Cat24A",
+    expectedLowestCat: "Cat24B"
+  },
